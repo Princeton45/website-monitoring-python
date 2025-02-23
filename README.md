@@ -11,41 +11,40 @@ I created a comprehensive website monitoring system that automatically detects d
 
 ## How It Works
 
-# Infrastructure Layer
+### Infrastructure Layer
 
 - The system runs on a Linode Linux server
 - All monitoring components are containerized using Docker for isolation and easy deployment
 
-# Monitoring Process
+### Monitoring Process
 
 - A Python script continuously runs inside the Docker container
 - It performs regular HTTP checks on the target website
 - The script also monitors the overall application status
 
-# Issue Detection
+### Issue Detection
 
 - When the monitoring script detects a problem (HTTP errors or timeout)
 - Two parallel processes are triggered:
   - Email notification system
   - Auto-recovery procedure
 
-# Recovery Workflow
+### Recovery Workflow
 
 - The auto-recovery script attempts to restart the application
 - If application restart fails, it can escalate to a server restart
 - The system continuously monitors the recovery process
 
-# Notification System
+### Notification System
 
 - Immediate email alerts are sent when issues are detected
 - Additional notifications are sent if recovery attempts fail
 - Success notifications are sent once the system is back online
 
-# Continuous Monitoring
+### Continuous Monitoring
 
 - After successful recovery, the system returns to its regular monitoring state
 - The cycle continues to ensure constant website availability
-
 ## Technologies Used
 
 - Python
