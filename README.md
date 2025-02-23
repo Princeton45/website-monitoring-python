@@ -2,11 +2,12 @@
 
 A automated system I built to monitor website health and perform recovery actions using Python, Docker, and Linux.
 
-![Project Technology Stack](suggest: Add an image showing the logos of Python, Linode, Docker, and Linux)
-
 ## Overview
 
 I created a comprehensive website monitoring system that automatically detects downtime and performs recovery actions. The system runs on a cloud infrastructure and sends email notifications when issues are detected.
+
+![diagram](https://github.com/Princeton45/website-monitoring-python/blob/main/images/diagram.png)
+
 
 ## Technologies Used
 
