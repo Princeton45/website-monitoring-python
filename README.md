@@ -11,40 +11,48 @@ I created a comprehensive website monitoring system that automatically detects d
 
 ## How It Works
 
-### Infrastructure Layer
+## Infrastructure Layer
 
-- The system runs on a Linode Linux server
-- All monitoring components are containerized using Docker for isolation and easy deployment
+- The application is hosted on a Linode Linux server.
+- The application runs inside a Docker container on the server.
+- Remote server management is performed using the Linode API for rebooting and SSH for container management.
 
-### Monitoring Process
+## Monitoring Process
 
-- A Python script continuously runs inside the Docker container
-- It performs regular HTTP checks on the target website
-- The script also monitors the overall application status
+- **Regular Checks:**  
+  The script uses the `schedule` library to perform HTTP GET requests every 5 minutes against the application’s endpoint (`http://45.79.203.107:8080/`).
+  
+- **Health Determination:**  
+  A response with a status code of 200 indicates that the application is running normally. Any other status code or an inability to reach the application triggers the recovery process.
 
-### Issue Detection
+## Issue Detection and Notification
 
-- When the monitoring script detects a problem (HTTP responses other than 200 or timeout)
-- Two parallel processes are triggered:
-  - Email notification system
-  - Auto-recovery procedure
+- **Detection:**  
+  - If the HTTP response status is not 200, the application is assumed to have an issue.
+  - If an exception occurs during the HTTP request (for example, if the application is completely unreachable), the error is caught and processed.
+  
+- **Notification:**  
+  An email notification is sent via Gmail’s SMTP server with details of the issue, immediately alerting you.
 
-### Recovery Workflow
+## Recovery Workflow
 
-- The auto-recovery script attempts to restart the application
-- If application restart fails, it can escalate to a server restart
-- The system continuously monitors the recovery process
+1. **Container Restart:**  
+   - If an HTTP request returns a non-200 status, the script attempts to restart the Docker container by connecting via SSH.
+   
+2. **Server Reboot and Container Restart:**  
+   - If a connection error occurs (suggesting that the application might be completely inaccessible), the script escalates the recovery by rebooting the Linode server.
+   - The reboot is initiated using the Linode API. Once the server is back online, the Docker container is restarted using an SSH command.
 
-### Notification System
+## Continuous Operation
 
-- Immediate email alerts are sent when issues are detected
-- Additional notifications are sent if recovery attempts fail
-- Success notifications are sent once the system is back online
+- The script runs in an infinite loop:
+  - The monitoring task is triggered every 5 minutes.
+  - After any recovery actions, the script returns to its normal monitoring state.
+- Environment variables are used to securely provide:
+  - `EMAIL_ADDRESS` and `EMAIL_PASSWORD` for SMTP authentication.
+  - `LINODE_TOKEN` for access to the Linode API.
+- SSH key-based authentication is used for accessing the remote server, so ensure that the key file path is correctly configured.
 
-### Continuous Monitoring
-
-- After successful recovery, the system returns to its regular monitoring state
-- The cycle continues to ensure constant website availability
 ## Technologies Used
 
 - Python
